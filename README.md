@@ -183,7 +183,7 @@ Here's an alternative visualization using a timeline format:
 
 ```mermaid
 gantt
-    title Race Condition Comparison
+    title Race Condition Comparison (Corrected)
     dateFormat  s
     axisFormat %S
 
@@ -199,18 +199,17 @@ gantt
 
     section With Cleanup
     Component mounts with userId=1      :b1, 0, 1s
-    isMounted = true (effect 1)         :b2, after b1, 1s
-    fetchUser(1) starts                 :b3, after b2, 3s
-    Props change: userId → 2            :b4, after b1, 1s
-    Cleanup: isMounted = false (effect 1) :b5, after b4, 1s
-    isMounted = true (effect 2)         :b6, after b5, 1s
-    fetchUser(2) starts                 :b7, after b6, 1s
-    fetchUser(2) completes              :b8, after b7, 1s
-    Check isMounted (true) & update     :b9, after b8, 1s
-    UI shows User 2's data              :b10, after b9, 1s
-    fetchUser(1) completes              :b11, after b3, 1s
-    Check isMounted (false) & no update :b12, after b11, 1s
-    UI correctly keeps User 2's data    :b13, after b12, 1s
+    Effect runs - userId=1               :b2, after b1, 1s
+    fetch("/api/users/1") starts        :b3, after b2, 3s
+    Props change - userId → 2            :b4, after b1, 1s
+    Cleanup from previous effect runs   :b5, after b4, 1s
+    Effect runs again - userId=2         :b6, after b5, 1s
+    fetch("/api/users/2") starts        :b7, after b6, 1s
+    fetch("/api/users/2") completes     :b8, after b7, 1s
+    UI shows User 2's data              :b9, after b8, 1s
+    fetch("/api/users/1") completes     :b10, after b3, 1s
+    No state update (due to cleanup)    :b11, after b10, 1s
+    UI correctly keeps User 2's data    :b12, after b11, 1s
 ```
 
 These diagrams illustrate how the race condition occurs without proper cleanup and how the isMounted flag pattern prevents it by ensuring that only the most recent request's data is used to update the component state.
