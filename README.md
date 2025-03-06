@@ -1,4 +1,6 @@
-### Race Conditions in React Data Fetching: With vs. Without Proper Cleanup
+# Race Conditions in React Data Fetching: With vs. Without Proper Cleanup
+
+**NB Docs and the code was genrated by an LLM**
 
 I'll create a textual diagram that illustrates the difference between handling race conditions with and without proper cleanup in a React component. This example will show what happens when a user profile component rapidly switches between different user IDs.
 
